@@ -1,0 +1,25 @@
+{
+  "name": "async-weather-news-dashboard",
+  "version": "1.0.0",
+  "description": "A dashboard demonstrating async programming with weather and news APIs",
+  "main": "dist/index.js",
+  "scripts": {
+    "start": "node dist/index.js",
+    "build": "tsc",
+    "dev": "ts-node-dev --respawn src/index.ts",
+    "callback": "ts-node-dev src/callbackVersion.ts",
+    "promise": "ts-node-dev src/promiseVersion.ts",
+    "async": "ts-node-dev src/asyncAwaitVersion.ts"
+  },
+  "dependencies": {
+    "axios": "^1.4.0"
+  },
+  "devDependencies": {
+    "@types/axios": "^0.14.0",
+    "@types/node": "^18.15.11",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.0.4"
+  },
+  "author": "Your Name",
+  "license": "ISC"
+}
