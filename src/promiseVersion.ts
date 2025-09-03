@@ -21,14 +21,21 @@ interface NewsData {
 function fetchWeather(): Promise<WeatherData> {
   return axios
     .get('https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.405&current_weather=true')
-    .then((response) => response.data);
+    .then((response) => response.data)
+    .catch((error) => Promise.reject(new Error(`Network error: ${error.message}`)));
 }
 
 // Function to fetch news data
 function fetchNews(): Promise<NewsData> {
   return axios
     .get('https://dummyjson.com/posts?limit=5')
-    .then((response) => response.data);
+    .then((response) => response.data)
+    .catch((error) => Promise.reject(new Error(`Network error: ${error.message}`)));
+}
+
+// Consistent error formatter
+function formatError(type: string, error: Error): void {
+  console.error(`Error fetching ${type}: ${error.message}`);
 }
 
 // Promise chaining example
@@ -46,7 +53,7 @@ function promiseChain() {
       });
     })
     .catch((error) => {
-      console.error('Error:', error.message);
+      formatError('data in chain', error);
     });
 }
 
@@ -62,7 +69,7 @@ function promiseAll() {
       });
     })
     .catch((error) => {
-      console.error('Error:', error.message);
+      formatError('concurrent data', error);
     });
 }
 
@@ -81,7 +88,7 @@ function promiseRace() {
       }
     })
     .catch((error) => {
-      console.error('Error:', error.message);
+      formatError('race data', error);
     });
 }
 

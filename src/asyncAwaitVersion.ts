@@ -19,14 +19,27 @@ interface NewsData {
 
 // Function to fetch weather data
 async function fetchWeather(): Promise<WeatherData> {
-  const response = await axios.get('https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.405&current_weather=true');
-  return response.data;
+  try {
+    const response = await axios.get('https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.405&current_weather=true');
+    return response.data;
+  } catch (error: any) {
+    throw new Error(`Network error: ${error.message}`);
+  }
 }
 
 // Function to fetch news data
 async function fetchNews(): Promise<NewsData> {
-  const response = await axios.get('https://dummyjson.com/posts?limit=5');
-  return response.data;
+  try {
+    const response = await axios.get('https://dummyjson.com/posts?limit=5');
+    return response.data;
+  } catch (error: any) {
+    throw new Error(`Network error: ${error.message}`);
+  }
+}
+
+// Consistent error formatter
+function formatError(type: string, error: any): void {
+  console.error(`Error fetching ${type}: ${error.message}`);
 }
 
 // Async/Await sequential fetching
@@ -41,8 +54,8 @@ async function asyncSequential() {
     newsData.posts.forEach((post: Post) => {
       console.log(`- ${post.title}`);
     });
-  } catch (error: any) {
-    console.error('Error:', error.message);
+  } catch (error) {
+    formatError('sequential data', error);
   }
 }
 
@@ -56,8 +69,8 @@ async function asyncConcurrent() {
     newsData.posts.forEach((post: Post) => {
       console.log(`- ${post.title}`);
     });
-  } catch (error: any) {
-    console.error('Error:', error.message);
+  } catch (error) {
+    formatError('concurrent data', error);
   }
 }
 
@@ -74,8 +87,8 @@ async function asyncRace() {
         console.log(`- ${post.title}`);
       });
     }
-  } catch (error: any) {
-    console.error('Error:', error.message);
+  } catch (error) {
+    formatError('race data', error);
   }
 }
 

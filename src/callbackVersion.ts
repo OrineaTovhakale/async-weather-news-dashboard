@@ -37,6 +37,11 @@ function fetchData(url: string, callback: (error: Error | null, data: any) => vo
   });
 }
 
+// Consistent error formatter
+function formatError(type: string, error: Error): void {
+  console.error(`Error fetching ${type}: ${error.message}`);
+}
+
 // Callback-based implementation
 function getWeatherAndNews() {
   console.log('Fetching weather and news with callbacks...');
@@ -44,7 +49,7 @@ function getWeatherAndNews() {
   // Fetch weather data
   fetchData('https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.405&current_weather=true', (weatherError, weatherData: WeatherData) => {
     if (weatherError) {
-      console.error('Weather Error:', weatherError.message);
+      formatError('weather', weatherError);
       return;
     }
 
@@ -54,7 +59,7 @@ function getWeatherAndNews() {
     // Nested callback: Fetch news after weather
     fetchData('https://dummyjson.com/posts?limit=5', (newsError, newsData: NewsData) => {
       if (newsError) {
-        console.error('News Error:', newsError.message);
+        formatError('news', newsError);
         return;
       }
 
@@ -66,7 +71,7 @@ function getWeatherAndNews() {
       // Nested callback: Simulate another dependent call (e.g., more news)
       fetchData('https://dummyjson.com/posts?limit=5&skip=5', (moreNewsError, moreNewsData: NewsData) => {
         if (moreNewsError) {
-          console.error('More News Error:', moreNewsError.message);
+          formatError('more news', moreNewsError);
           return;
         }
 
